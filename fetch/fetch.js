@@ -1,5 +1,5 @@
 const api = '4ebd41ef190c4dbdbc6c3b8cab1e5e31';
-
+const fetch = require('node-fetch');
 /**
  *
  * @param {string}name

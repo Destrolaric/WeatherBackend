@@ -29,4 +29,6 @@ router.get('/coordinates', handler(async (req, res) => {
   res.status(200).send(data);
 }));
 
-module.exports = router;
+module.exports = {
+  router,
+};
