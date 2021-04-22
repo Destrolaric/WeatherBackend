@@ -6,9 +6,8 @@ const weather = require('./requests/weather');
 const cors = require('cors');
 const MySql = require('mysql');
 app.use(cors());
-require('dotenv').config();
 
-const con = MySql.createConnection(process.env.JAWSDB_URL);
+let con;
 
 /**
  *
@@ -16,8 +15,8 @@ const con = MySql.createConnection(process.env.JAWSDB_URL);
  */
 async function start() {
   if (process.env.JAWSDB_URL) {
+    con = MySql.createConnection(process.env.JAWSDB_URL);
     con.connect();
-
     app.use('/weather', weather.router);
     favourites.initSchema(con);
     app.use('/favourite', favourites.app);
@@ -28,4 +27,6 @@ async function start() {
 }
 
 
-start().then((r) => con.end());
+start().then((r) => {
+  if (con) con.end();
+});
