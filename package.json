@@ -1,0 +1,32 @@
+{
+  "name": "weatherbackend",
+  "engines": {
+    "node": "11.10.0"
+  },
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "connection-string": "^4.3.2",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.24.0",
+    "eslint-config-google": "^0.14.0"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-async-handler": "^1.1.4",
+    "mariadb": "^2.5.3",
+    "mongoose": "^5.12.5",
+    "mysql": "^2.0.1",
+    "node-mariadb": "^0.1.1",
+    "redis": "^3.1.2"
+  }
+}
