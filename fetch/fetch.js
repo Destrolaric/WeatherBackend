@@ -19,7 +19,7 @@ async function fetchCity(url) {
   const response = await fetch(url, {
     'method': 'GET',
   });
-  return response.json();
+  return response;
 }
 
 /**
