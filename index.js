@@ -4,7 +4,8 @@ const port = process.env.PORT || 3000;
 const favourites = require('./requests/favourites');
 const weather = require('./requests/weather');
 const cors = require('cors');
-const MySql = require('mysql');
+const {Client} = require('pg');
+
 app.use(cors());
 
 let con;
@@ -14,19 +15,26 @@ let con;
  * @return {Promise<void>}
  */
 async function start() {
-  if (process.env.JAWSDB_URL) {
-    con = MySql.createConnection(process.env.JAWSDB_URL);
-    con.connect();
-    app.use('/weather', weather.router);
-    favourites.initSchema(con);
-    app.use('/favourite', favourites.app);
+  require('dotenv').config();
+  try {
+    if (process.env.HEROKU_POSTGRESQL_BLACK_URL) {
+      con = await new Client({
+        connectionString: process.env.HEROKU_POSTGRESQL_BLACK_URL,
+        ssl: {rejectUnauthorized: false}
+      });
+      con.connect();
+      app.use('/weather', weather.router);
+      favourites.initSchema(con);
+      app.use('/favourite', favourites.app);
+    }
+    app.listen(port, () => {
+      console.log(`system started `);
+    });
+  } catch (e) {
+    console.log(e);
   }
-  app.listen(port, () => {
-    console.log(`system started `);
-  });
 }
 
 
 start().then((r) => {
-  if (con) con.end();
 });
