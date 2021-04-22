@@ -7,13 +7,17 @@ router.get('/city', handler(async (req, res) => {
   const {q} = req.query;
 
   const data = await requests.fetchCityByName(q);
-
   if (data == null) {
     res.status(404).send();
     return;
   }
-
-  res.status(200).send(data);
+  if (data.status === 204) {
+    res.status(204).send();
+    return;
+  }
+  if (data.status === 200) {
+    res.status(200).send(data.json());
+  }
 }));
 
 router.get('/coordinates', handler(async (req, res) => {
@@ -25,8 +29,13 @@ router.get('/coordinates', handler(async (req, res) => {
     res.status(404).send();
     return;
   }
-
-  res.status(200).send(data);
+  if (data.status === 204) {
+    res.status(204).send();
+    return;
+  }
+  if (data.status === 200) {
+    res.status(200).send(data.json());
+  }
 }));
 
 module.exports = {

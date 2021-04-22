@@ -16,17 +16,9 @@ async function fetchCityByName(name) {
  * @return {Promise<any>}
  */
 async function fetchCity(url) {
-  const response = await fetch(url, {
+  return await fetch(url, {
     'method': 'GET',
   });
-  if (response.status === 200) {
-    return response.json();
-  }
-  if (response.status === 204) {
-    throw new Error('This city does not exist!');
-  } else {
-    throw new Error(`Something wrong ${response.status}`);
-  }
 }
 
 /**
