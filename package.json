@@ -15,12 +15,12 @@
   "license": "ISC",
   "devDependencies": {
     "connection-string": "^4.3.2",
-    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "eslint": "^7.24.0",
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "mariadb": "^2.5.3",
