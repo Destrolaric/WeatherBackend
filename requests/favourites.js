@@ -1,30 +1,30 @@
-const getModel = require('../db/db');
+const initTable = require('../db/db');
 const fetcher = require('../fetch/fetch');
 const handler = require('express-async-handler');
 const express = require('express');
 const app = new express.Router();
-let model;
+let con;
 
 /**
  *
- * @param {database} JawsMariaDb
+ * @param {database} connection towards sql database;
  */
-function initSchema(JawsMariaDb) {
-  model = getModel(JawsMariaDb);
+function initSchema(connection) {
+  initTable(connection);
+  con = connection;
 }
-app.get('/', handler(async (req, res, next) => {
-  const q = req.query;
-  const data = await fetcher.fetchCityByName(q);
-  if (data == null) {
-    res.status(404).send;
-    return;
-  }
-  const exists = model.findOne({cityname: data.name}).exec;
-  if (!exists !== null) {
-    res.status(409).send();
-  }
-  model({cityName: data.name}).save();
-  res.status(200).send(data);
+
+app.get('*', handler(async (req, res, next) => {
+  await con.query('select cityName from Cities', (error, cities, fields) => {
+    if (error) {
+      res.status(404).send();
+      return;
+    }
+    const citiesArray = [];
+
+    cities.forEach((info) => citiesArray.push(info.cityName));
+    res.send({favouriteCities: citiesArray});
+  });
 }));
 app.post('/', handler(async (req, res) => {
   const {q} = req.query;
@@ -43,7 +43,7 @@ app.post('/', handler(async (req, res) => {
     return;
   }
 
-  model({cityName: data.name}).save();
+  con.query('');
   res.status(201).send(data);
 }));
 app.delete('/', handler(async (req, res) =>{

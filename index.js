@@ -4,21 +4,22 @@ const port = process.env.PORT || 3000;
 const favourites = require('./requests/favourites');
 const weather = require('./requests/weather');
 const cors = require('cors');
+const MySql = require('mysql');
 app.use(cors());
+require('dotenv').config();
+
+const con = MySql.createConnection(process.env.JAWSDB_URL);
 
 /**
  *
  * @return {Promise<void>}
  */
 async function start() {
-  require('dotenv').config();
+  if (process.env.JAWSDB_URL) {
+    con.connect();
 
-  if (process.env.REDISTOGO_URL) {
-    const rtg = require('url').parse(process.env.REDISTOGO_URL);
-    const redis = require('redis').createClient(rtg.port, rtg.hostname);
-    redis.auth(rtg.auth.split(':')[1]);
     app.use('/weather', weather.router);
-    favourites.initSchema(redis);
+    favourites.initSchema(con);
     app.use('/favourite', favourites.app);
   }
   app.listen(port, () => {
@@ -27,4 +28,4 @@ async function start() {
 }
 
 
-start().then((r) => console.log(r));
+start().then((r) => con.end());
