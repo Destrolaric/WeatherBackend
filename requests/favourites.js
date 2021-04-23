@@ -35,8 +35,16 @@ app.post('/', handler(async (req, res) => {
     res.status(404).send();
     return;
   }
-
-  const exists = await model.findOne({cityName: data.name}).exec();
+  if (await con.query(`select cityName from Cities where cityName = ${q}`,
+    (err, result) => {
+      if (result != null) {
+        res.status(404);
+        res.send();
+      } else {
+        con.query(`insert into Cities (cityName) values (\`${q}\`)`);
+      }
+    })) {
+  }
 
   if (exists !== null) {
     res.status(409).send();
@@ -44,18 +52,25 @@ app.post('/', handler(async (req, res) => {
   }
 
   con.query('');
-  res.status(201).send(data);
+  res.status(200).send(data);
 }));
-app.delete('/', handler(async (req, res) =>{
-  const remove = await model.findOneAndRemove({cityName: q});
-  if (remove === null) {
-    res.status(404);
-    res.send();
-    return;
-  }
+app.delete('/', handler(async (req, res) => {
+  if (req.query != null) {
+    await con.query(`delete from Cities where cityName=${req.query}`,
+      (err, result) => {
+        if (err !== null) {
+          res.status(404);
+          res.send();
+          return;
+        }
 
-  res.status(204).send();
+        res.status(200).send();
+      });
+  } else {
+    res.status(404).send();
+  }
 }));
+
 
 module.exports = {
   app, initSchema,

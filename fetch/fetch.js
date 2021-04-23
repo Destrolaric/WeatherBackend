@@ -1,5 +1,5 @@
 const api = '4ebd41ef190c4dbdbc6c3b8cab1e5e31';
-
+const fetch = require('node-fetch');
 /**
  *
  * @param {string}name
@@ -19,7 +19,11 @@ async function fetchCity(url) {
   const response = await fetch(url, {
     'method': 'GET',
   });
-  return response;
+  if (response.status === 200) {
+    return response.json();
+  } else {
+    return null;
+  }
 }
 
 /**
