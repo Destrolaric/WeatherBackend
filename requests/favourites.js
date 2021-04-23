@@ -60,7 +60,10 @@ app.post('/', handler(async (req, res) => {
 app.delete('/', handler(async (req, res) => {
   const {q} = req.query;
   const data = await fetcher.fetchCityByName(q);
-
+  if (data == null) {
+    res.status(404).send();
+    return;
+  }
   if (req.query != null) {
     await con
       .query(`delete from Cities where cityName=\'${[data[0]
