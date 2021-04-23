@@ -37,7 +37,7 @@ app.post('/', handler(async (req, res) => {
   }
   await con.query(`select cityName from Cities where cityName = ${q}`,
     (err, result) => {
-      if (result == null || err != null) {
+      if (result != null || err != null) {
         res.status(404);
         res.send();
       } else {
