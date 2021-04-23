@@ -35,24 +35,16 @@ app.post('/', handler(async (req, res) => {
     res.status(404).send();
     return;
   }
-  if (await con.query(`select cityName from Cities where cityName = ${q}`,
+  await con.query(`select cityName from Cities where cityName = ${q}`,
     (err, result) => {
-      if (result != null) {
+      if (result == null || err != null) {
         res.status(404);
         res.send();
       } else {
         con.query(`insert into Cities (cityName) values (\`${q}\`)`);
+        res.status(200).send(data);
       }
-    })) {
-  }
-
-  if (exists !== null) {
-    res.status(409).send();
-    return;
-  }
-
-  con.query('');
-  res.status(200).send(data);
+    });
 }));
 app.delete('/', handler(async (req, res) => {
   if (req.query != null) {
