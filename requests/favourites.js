@@ -41,18 +41,21 @@ app.post('/', handler(async (req, res) => {
     res.status(404).send();
     return;
   }
-  await con.query(`select cityName from Cities where cityName = ${q.toLowerCase()}`,
-    (err, result) => {
-      if (result != null) {
-        res.status(404);
-        res.send();
-      } else {
-        console.log(`insert into Cities (cityName)` +
-          ` values (\`${q.toLowerCase()}\`)`);
-        con.query('insert into Cities (cityName)' +
-          ` values (\'${[q.toLowerCase()]}\')`);
-        res.status(200).send(data);
-      }
+  await con.query(`select cityName from Cities where cityName = '${q.toLowerCase()}'`)
+    .then(
+      (result) => {
+        if (result.rowCount !== 0) {
+          res.status(404);
+          res.send();
+        } else {
+          console.log(`insert into Cities (cityName)` +
+            ` values (\`${q.toLowerCase()}\`)`);
+          con.query('insert into Cities (cityName)' +
+            ` values (\'${[q.toLowerCase()]}\')`);
+          res.status(200).send(data);
+        }
+      }).catch((e) => {
+      res.status(404).send();
     });
 }));
 app.delete('/', handler(async (req, res) => {
