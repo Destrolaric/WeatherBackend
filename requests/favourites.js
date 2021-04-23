@@ -34,7 +34,6 @@ app.get('*', handler(async (req, res, next) => {
 }));
 app.post('/', handler(async (req, res) => {
   const {q} = req.query;
-  console.log(q);
 
   const data = await fetcher.fetchCityByName(q);
 
@@ -61,7 +60,7 @@ app.post('/', handler(async (req, res) => {
 }));
 app.delete('/', handler(async (req, res) => {
   const {q} = req.query;
-  console.log(q);
+
   const data = await fetcher.fetchCityByName(q);
   if (data == null) {
     res.status(404).send();
