@@ -17,7 +17,7 @@ router.get('/city', handler(async (req, res) => {
 }));
 
 router.get('/coordinates', handler(async (req, res) => {
-  const {lat, lon} = encodeURI(req.query);
+  const {lat, lon} = req.query;
 
   const data = await requests.fetchCityByCoordinate(lat, lon);
   if (data == null) {
