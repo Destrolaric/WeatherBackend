@@ -41,17 +41,16 @@ app.post('/', handler(async (req, res) => {
     res.status(404).send();
     return;
   }
-  await con.query(`select cityName from Cities where cityName = '${q.toLowerCase()}'`)
+  await con.query(`select cityName from Cities where cityName = '${data[0]
+    .city_name.toLowerCase()}'`)
     .then(
       (result) => {
         if (result.rowCount !== 0) {
           res.status(404);
           res.send();
         } else {
-          console.log(`insert into Cities (cityName)` +
-            ` values (\`${q.toLowerCase()}\`)`);
           con.query('insert into Cities (cityName)' +
-            ` values (\'${[q.toLowerCase()]}\')`);
+            ` values (\'${[data[0].city_name.toLowerCase()]}\')`);
           res.status(200).send(data);
         }
       }).catch((e) => {
@@ -60,10 +59,12 @@ app.post('/', handler(async (req, res) => {
 }));
 app.delete('/', handler(async (req, res) => {
   const {q} = req.query;
+  const data = await fetcher.fetchCityByName(q);
 
   if (req.query != null) {
     await con
-      .query(`delete from Cities where cityName=\'${[q.toLowerCase()]}\'`,
+      .query(`delete from Cities where cityName=\'${[data[0]
+          .city_name.toLowerCase()]}\'`,
         (err, result) => {
           if (err !== null) {
             res.status(404);
