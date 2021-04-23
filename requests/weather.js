@@ -4,11 +4,12 @@ const requests = require('../fetch/fetch');
 const router =new express.Router();
 
 router.get('/city', handler(async (req, res) => {
-  const {q} = req.query;
+  const {q} = decodeURI(req.query);
 
   const data = await requests.fetchCityByName(q);
 
   if (data == null) {
+    console.log('no data found');
     res.status(404).send();
     return;
   }
