@@ -4,7 +4,7 @@ const requests = require('../fetch/fetch');
 const router =new express.Router();
 
 router.get('/city', handler(async (req, res) => {
-  const {q} = encodeURI(req.query);
+  const {q} = req.query;
 
   const data = await requests.fetchCityByName(q);
 
