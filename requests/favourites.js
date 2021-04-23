@@ -21,9 +21,14 @@ app.get('*', handler(async (req, res, next) => {
       return;
     }
     const citiesArray = [];
+    if (cities != null) {
+      console.log(cities);
 
-    cities.forEach((info) => citiesArray.push(info.cityName));
-    res.send({favouriteCities: citiesArray});
+      cities.forEach((info) => citiesArray.push(info.cityName));
+      res.send({favouriteCities: citiesArray});
+      return;
+    }
+    res.status(404).send();
   });
 }));
 app.post('/', handler(async (req, res) => {
