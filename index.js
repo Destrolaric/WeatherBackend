@@ -15,7 +15,6 @@ let con;
  * @return {Promise<void>}
  */
 async function start() {
-  require('dotenv').config();
   try {
     if (process.env.HEROKU_POSTGRESQL_BLACK_URL) {
       con = await new Client({
