@@ -21,11 +21,10 @@ app.get('*', handler(async (req, res, next) => {
       return;
     }
     const citiesArray = [];
-    if (cities != null) {
+    if (cities.rowCount !== 0) {
       console.log(cities);
-
-      cities.on('cityName', (columns) => {
-        columns.forEach((info) => citiesArray.push(info.value));
+      cities.rows.forEach((row) => {
+        citiesArray.push(row.cityname);
       });
       res.send({favouriteCities: citiesArray});
       return;
@@ -42,29 +41,35 @@ app.post('/', handler(async (req, res) => {
     res.status(404).send();
     return;
   }
-  await con.query(`select cityName from Cities where cityName = ${q}`,
+  await con.query(`select cityName from Cities where cityName = ${q.toLowerCase()}`,
     (err, result) => {
-      if (result != null || err != null) {
+      if (result != null) {
         res.status(404);
         res.send();
       } else {
-        con.query(`insert into Cities (cityName) values (\`${q}\`)`);
+        console.log(`insert into Cities (cityName)` +
+          ` values (\`${q.toLowerCase()}\`)`);
+        con.query('insert into Cities (cityName)' +
+          ` values (\'${[q.toLowerCase()]}\')`);
         res.status(200).send(data);
       }
     });
 }));
 app.delete('/', handler(async (req, res) => {
-  if (req.query != null) {
-    await con.query(`delete from Cities where cityName=${req.query}`,
-      (err, result) => {
-        if (err !== null) {
-          res.status(404);
-          res.send();
-          return;
-        }
+  const {q} = req.query;
 
-        res.status(200).send();
-      });
+  if (req.query != null) {
+    await con
+      .query(`delete from Cities where cityName=\'${[q.toLowerCase()]}\'`,
+        (err, result) => {
+          if (err !== null) {
+            res.status(404);
+            res.send();
+            return;
+          }
+
+          res.status(200).send();
+        });
   } else {
     res.status(404).send();
   }
