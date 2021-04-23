@@ -24,7 +24,9 @@ app.get('*', handler(async (req, res, next) => {
     if (cities != null) {
       console.log(cities);
 
-      cities.forEach((info) => citiesArray.push(info.cityName));
+      cities.on('cityName', (columns) => {
+        columns.forEach((info) => citiesArray.push(info.value));
+      });
       res.send({favouriteCities: citiesArray});
       return;
     }
