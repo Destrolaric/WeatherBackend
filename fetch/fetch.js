@@ -1,4 +1,4 @@
-const api = '4ebd41ef190c4dbdbc6c3b8cab1e5e31';
+const api = process.env.WEATHER_API;
 const fetch = require('node-fetch');
 /**
  *
