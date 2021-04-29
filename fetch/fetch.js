@@ -6,8 +6,9 @@ const fetch = require('node-fetch');
  * @return {Promise<*>}
  */
 async function fetchCityByName(name) {
-  console.log(name);
-  const url = `https://api.weatherbit.io/v2.0/current?key=${api}&city=${encodeURI(name)}`;
+  require('dotenv').config();
+
+  const url = `https://api.weatherbit.io/v2.0/current?key=${process.env.WEATHER_API}&city=${encodeURI(name)}`;
   return await fetchCity(url);
 }
 
