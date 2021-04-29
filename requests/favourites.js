@@ -50,7 +50,7 @@ app.post('/', handler(async (req, res) => {
   if (result.rowCount !== 0) {
     res.status(404).send();
   } else {
-    requests.insertCity(q, con).catch(() => {
+    requests.insertCity(data.data[0].city_name, con).catch(() => {
       res.status(500).send();
     });
     res.status(200).send(data);
@@ -67,7 +67,7 @@ app.delete('/', handler(async (req, res) => {
     return;
   }
   if (req.query != null) {
-    requests.deleteCity(data.data[0].city_name, con).catch(() => {
+    requests.deleteCity(q, con).catch(() => {
       res.status(404).send();
     });
     res.status(200).send();
